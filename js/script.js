@@ -1,17 +1,15 @@
-var board = null;
-var $board = $('#board');
-var game = new Chess();
-var globalSum = 0; // This is set from the black pieces perspective.
-var whiteSquareGrey = '#a9a9a9';
-var blackSquareGrey = '#696969';
+/**
+ * This is the script file. All algorithms and AI is located in this file.
+ * The chess.js file is the implementation of the chess rules.
+ * 
+ * Copyright (c) 2021 Jens Jensen & Keith Birongo
+ */
 
-var squareClass = 'square-55d63';
-var squareToHighlight = null;
-var colorToHighlight = null;
-var positionCount;
+var game = new Chess();
 
 var config = {
   draggable: true,
   position: 'start',
 };
+
 var board = new Chessboard('board', config);
