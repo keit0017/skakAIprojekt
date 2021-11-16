@@ -9,11 +9,9 @@ let game = new Chess();
 //We need to initialize board otherwise we get error when called in precompile.
 let board = null;
 function onDragStart(source, piece, position, orientation) {
-
     if (game.game_over()) return false;
     // It checks whos turn it is and if the piece we try to move is the opposite color.
-    if ((game.turn() === "w" && piece.search("/^b/") !== -1) || 
-        (game.turn() === "b" && piece.search("/^w/") !== -1)) {
+    if ((piece.search("/^w/") !== -1)) {
             return false;
         }
 }
@@ -25,12 +23,25 @@ function onDrop(source, target) {
         promotion: "q",
     });
 
-    if (move === null) return false;
+    if (move === null) return 'snapback';
+
+    //køre på sorts tur
+    window.setTimeout(randomMove, 250)
 }
 
 function onSnapEnd() {
     board.position(game.fen())
 }
+
+function randomMove() {
+    var newGameMoves = game.moves();
+    // game over
+    if (newGameMoves.length === 0) return
+
+    var randomIdx= Math.floor(Math.random() * newGameMoves.length);
+    game.move(newGameMoves[randomIdx])
+    board.position(game.fen())
+};
 
 let config = {
   draggable: true,
