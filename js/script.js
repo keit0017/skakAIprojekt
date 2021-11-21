@@ -9,7 +9,6 @@ let game = new Chess();
 //We need to initialize board otherwise we get error when called in precompile.
 let board = null;
 function onDragStart(source, piece, position, orientation) {
-
     if (game.game_over()) return false;
     // It checks whos turn it is and if the piece we try to move is the opposite color.
     if ((game.turn() === "w" && piece.search("/^b/") !== -1) || 
