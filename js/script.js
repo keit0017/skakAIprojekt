@@ -223,7 +223,7 @@ function minmaxAlphaBeta(player, maximize, k, sum, game, alpha, beta){
 }
 
 function calcMove(player, game, sum) {
-    const k = 4;
+    const k = 3;
 
     let [move, value] = minmaxAlphaBeta(player,true,k,sum,game,Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
     // const d = new Date().getTime();
