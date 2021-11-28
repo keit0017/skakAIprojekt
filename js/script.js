@@ -22,10 +22,8 @@ let config = {
 
 board = new Chessboard('board', config);
 
-const pieceWeight = {"p":100, "n":300, "b":300, "r": 500, "q":900, "k":10000};
+const pieceWeight = {"p":80, "n":300, "b":300, "r": 500, "q":900, "k":10000};
 
-// kingsafety
-const AttackingKingzone = {1:0, "n":300, "b":300, "r": 500, "q":900, "k":10000};
 const whitePositions = {
     "p":[
         [ 10, 10, 10, 10, 10, 10, 10,  10],
@@ -58,7 +56,7 @@ const whitePositions = {
         [ -20,-10,-10,-10,-10,-10,-10,-20,]
     ],
     "r": [  
-        [ 30,  0,  0,  5,  5,  0,  0,  0],
+        [ 0,  0,  0,  5,  5,  0,  0,  0],
         [ -5,  0,  0,  0,  0,  0,  0, -5],
         [-5,  0,  0,  0,  0,  0,  0, -5],
         [ -5,  0,  0,  0,  0,  0,  0, -5],
@@ -148,7 +146,7 @@ function evalFunc(move, points, player, game){
         if(move.color === player){
             points += (pieceWeight[move.captured] + enemyPosition[move.color][move.captured][to[0]][to[1]]);
         } else {
-            points += (pieceWeight[move.captured] + ourPosition[move.color][move.captured][to[0]][to[1]]);
+            points -= (pieceWeight[move.captured] + ourPosition[move.color][move.captured][to[0]][to[1]]);
         }
     }
     // Check if the piece can be promoted
@@ -171,10 +169,6 @@ function evalFunc(move, points, player, game){
             points += ourPosition[move.color][move.piece][from[0]][from[1]];
         }
     }
-    
-    //check if we can change the chess
-
-
 
 
     return points;
@@ -232,15 +226,45 @@ function minmaxAlphaBeta(player, maximize, k, sum, game, alpha, beta){
     }
 }
 
+var startTime, endTime;
+
 function calcMove(player, game, sum) {
-    const k = 4;
+    const maxvalue = 5;
+    let startvalue = 1;
+    let timeElapsed = 0;
+    let moves =[];
+    const maxtime =6000;
 
-    let [move, value] = minmaxAlphaBeta(player,true,k,sum,game,Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
-    // const d = new Date().getTime();
-    // const d2 = new Date().getTime();
-    // console.log(d2-d);
+    // iterative deepening 
+    startTimer();
+    while(timeElapsed<=maxtime){
+    let [move, value] = minmaxAlphaBeta(player,true,startvalue,sum,game,Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+    moves= [move, value];
+    startvalue +=1;
+    console.log(startvalue+"this is the current depth");
 
-    return [move, value];
+    if(startvalue == maxvalue){
+        return moves;
+    }
+
+    timeElapsed =endTimer();
+    }   
+    endTimer()
+    return moves;
+}
+
+
+
+function startTimer() {
+  startTime = performance.now();
+  console.log(startTime + " :starttime");
+};
+
+function endTimer() {
+  endTime = performance.now();
+  var timeDiff = endTime - startTime; 
+  console.log(timeDiff + " :milliseconds sincemove");
+  return timeDiff;
 }
 
 function makeMove(player) {
@@ -274,7 +298,7 @@ function onDrop(source, target) {
     totalSum = evalFunc(move, totalSum, "b", game);
 
     //This runs on blacks turn.
-    window.setTimeout(makeMove("b"), 250)
+    window.setTimeout(makeMove("b"), 250);
 }
 
 function onSnapEnd() {
