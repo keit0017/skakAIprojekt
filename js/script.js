@@ -18,7 +18,8 @@ let config = {
     onDrop: onDrop,
     onSnapEnd: onSnapEnd,
   };
-  
+
+
 board = new Chessboard('board', config);
 
 const pieceWeight = {"p":100, "n":300, "b":300, "r": 500, "q":900, "k":10000};
